@@ -65,51 +65,45 @@ public class MyTest extends AbstractTest {
     }
     @Test
     void getWine() {
-        JsonPath response = given()
-                .queryParam("apiKey", getApiKey())
+        given().spec(getRequestSpecification())
                 .queryParam("query", "wine")
                 .queryParam("minAlcohol", 8)
                 .when()
                 .get(getBaseUrl() + "recipes/complexSearch")
-                .body()
-                .jsonPath();
-        assertThat(response.get("totalResults"), is(5));
+                .then()
+                .spec(responseSpecification);
     }
     @Test
     void postBurger() {
-        JsonPath response = given()
-                .queryParam("apiKey", getApiKey())
+        given().spec(getRequestSpecification())
                 .queryParam("query", "burger")
                 .contentType("application/x-www-form-urlencoded")
                 .when()
                 .post(getBaseUrl() + "recipes/cuisine")
-                .body()
-                .jsonPath();
-        assertThat(response.get("cuisine"), is("American"));
+                .then()
+                .spec(responseSpecification);
     }
     @Test
     void postPizza() {
-        JsonPath response = given()
+        given().spec(getRequestSpecification())
                 .queryParam("apiKey", getApiKey())
                 .queryParam("query", "pizza")
                 .contentType("application/x-www-form-urlencoded")
                 .when()
                 .post(getBaseUrl() + "recipes/cuisine")
-                .body()
-                .jsonPath();
-        assertThat(response.get("cuisine"), is("Mediterranean"));
+                .then()
+                .spec(responseSpecification);
     }
     @Test
     void postPasta() {
-        JsonPath response = given()
+        given().spec(getRequestSpecification())
                 .queryParam("apiKey", getApiKey())
                 .queryParam("query", "pasta")
                 .contentType("application/x-www-form-urlencoded")
                 .when()
                 .post(getBaseUrl() + "recipes/cuisine")
-                .body()
-                .jsonPath();
-        assertThat(response.get("cuisine"), is("Mediterranean"));
+                .then()
+                .spec(responseSpecification);
     }
     @Test
     void connectUser () { // не могу понять почему не проходит авторизация
@@ -185,11 +179,10 @@ public class MyTest extends AbstractTest {
                 .get("id")
                 .toString();
 
-        given()
+        given().spec(getRequestSpecification())
                 .queryParam("hash", "a3da66460bfb7e62ea1c96cfa0b7a634a346ccbf")
-                .queryParam("apiKey", getApiKey())
                 .delete("https://api.spoonacular.com/mealplanner/geekbrains/items/" + id)
                 .then()
-                .statusCode(200);
+                .spec(responseSpecification);
     }
 }
